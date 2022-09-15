@@ -16,11 +16,11 @@ const Schema= mongoose.Schema
          required:true
      },
     
-     creatorId:{
-      type: Schema.Types.ObjectId,
-      ref: 'Users',
-      required: true
-  } 
+//      creatorId:{
+//       type: Schema.Types.ObjectId,
+//       ref: 'Users',
+//       required: true
+//   } 
  },
  {timestamps:true }
  )
