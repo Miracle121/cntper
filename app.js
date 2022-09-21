@@ -16,6 +16,7 @@ const role = require('./routes/role')
 const statusaccount= require('./routes/statusaccount')
 const cntpeople = require('./routes/cntpeople') 
 const education = require('./routes/education')
+const nationality = require('./routes/nationality')
 const auth = require('./routes/auth')
 
 
@@ -48,6 +49,7 @@ app.use('/role',role)
 app.use('/statusaccount',statusaccount)
 app.use('/cntpeople',cntpeople)
 app.use('/education',education)
+app.use('/nationality',nationality)
 
 
 
