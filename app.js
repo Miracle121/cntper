@@ -14,14 +14,17 @@ const citizenship = require('./routes/citizenship')
 const gender = require('./routes/gender')
 const role = require('./routes/role')
 const statusaccount= require('./routes/statusaccount')
+const cntpeople = require('./routes/cntpeople') 
+const education = require('./routes/education')
 const auth = require('./routes/auth')
+
 
 const app = express();
 
-// const URL= 'mongodb://localhost:27017/cntperssons'
+const URL= 'mongodb://localhost:27017/cntperssons'
 
- const URL = 'mongodb://alfa:admin123a@localhost:27017/cntperssons?authSource=admin'
-// const URL ='mongodb://alfa:admin123a@91.190.159.70:27017/Alfa?authSource=admin'
+//  const URL = 'mongodb://alfa:admin123a@localhost:27017/cntperssons?authSource=admin'
+// const URL ='mongodb://alfa:admin123a@91.190.159.70:27017/cntperssons?authSource=admin'
 
 global.__basedir = __dirname;
 // var corsOptions = {
@@ -43,6 +46,11 @@ app.use('/citizenship',citizenship)
 app.use('/gender',gender)
 app.use('/role',role)
 app.use('/statusaccount',statusaccount)
+app.use('/cntpeople',cntpeople)
+app.use('/education',education)
+
+
+
 app.use((error,req,res,next)=>{   
     const status = error.statusCode || 500
     const message = error.message

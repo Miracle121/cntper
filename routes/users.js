@@ -8,7 +8,8 @@ const router = express.Router()
 
 router.get('/',IsAuth,users.getUsers)
 router.get('/:id',IsAuth,users.getUsersById)
-router.post('/',[
+router.post('/',
+[
     body('email')
     .isEmail()
     .withMessage('iltimos email adress kiriting')
@@ -20,9 +21,8 @@ router.post('/',[
             }
         })
     }).normalizeEmail(),
-    body('password').trim().isLength({min:5})
-    
-],users.CreateUsers)
+    body('password').trim().isLength({min:5})],IsAuth,
+    users.CreateUsers)
 router.put('/:id',IsAuth,users.UpdateUsers)
 router.delete('/:id',IsAuth,users.DeleteUsers)
 router.get('/list/filter',IsAuth,users.UserFilter)
