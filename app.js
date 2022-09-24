@@ -3,7 +3,6 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const path = require('path')
 const cors = require('cors')
-
 // const session = require('express-session');
 const region = require('./routes/regions');
 const districts = require('./routes/districts')
@@ -17,7 +16,10 @@ const statusaccount= require('./routes/statusaccount')
 const cntpeople = require('./routes/cntpeople') 
 const education = require('./routes/education')
 const nationality = require('./routes/nationality')
+const typeofperson = require('./routes/typeofperson')
+const typeofcrime = require('./routes/typeofcrime')
 const auth = require('./routes/auth')
+ 
 
 
 const app = express();
@@ -28,9 +30,6 @@ const app = express();
 // const URL ='mongodb://alfa:admin123a@91.190.159.70:27017/cntperssons?authSource=admin'
 
 global.__basedir = __dirname;
-// var corsOptions = {
-//   origin: "http://localhost:8081"
-// };
 
 app.use(cors())
 app.use(express.json())
@@ -50,6 +49,8 @@ app.use('/statusaccount',statusaccount)
 app.use('/cntpeople',cntpeople)
 app.use('/education',education)
 app.use('/nationality',nationality)
+app.use('/typeofperson',typeofperson)
+app.use('/typeofcrime',typeofcrime)
 
 
 

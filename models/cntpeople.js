@@ -1,5 +1,11 @@
 const {Schema,model} = require('mongoose')
-const cntpeopleSchema = new Schema({
+const cntpeopleSchema = new Schema({   
+    typeofperson:{
+        type:Schema.Types.ObjectId,
+        ref:'Typeofperson',
+        required:true    
+
+    },
     name:{
         type: String,
         required:true
@@ -36,6 +42,53 @@ const cntpeopleSchema = new Schema({
     phone:{
         type:String
     },
+    regionId:{
+        type: Schema.Types.ObjectId,
+        ref: 'Region',
+        // required: true
+     },
+    districtsId:{
+        type: Schema.Types.ObjectId,
+        ref: 'Districts'
+      //   required: true
+     },
+    mfyId:{
+        type: Schema.Types.ObjectId,
+        ref: 'Mfy'            
+     },   
+     address:{
+        type: String
+     },
+     workplace:{
+        type: String,
+        required:true
+     },
+     basisconsideration:{
+        type: String,
+        required:true
+     },
+     dateofregistration:{
+        type: Date,
+        required:true
+     },
+     detailsoffence:{
+        type: String,
+        required:true
+     },
+     reasonsoffence:{
+        type: String,
+        required:true
+     },
+     prerequisitecondition:{
+        type: String,
+        required:true
+     },
+     typeofcrime:{
+        type:Schema.Types.ObjectId,
+        ref:'Typeofcrime',
+        required:true   
+
+     },  
     creatorId:{
         type: Schema.Types.ObjectId,
         ref: 'Users',

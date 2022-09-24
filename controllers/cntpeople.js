@@ -1,6 +1,6 @@
 const Cntpeople = require('../models/cntpeople')
 const User = require('../models/users')
-const {validationResult} = require('express-validator')
+const {validationResult, body} = require('express-validator')
 
 exports.getCntpeople= async(req,res,next)=>{
     const page = req.query.page ||1
@@ -46,6 +46,9 @@ exports.getCntpeopleById = async(req,res,next)=>{
 }
 
 exports.createCntpeople = async(req,res,next)=>{
+    const typeofperson= req.body.typeofperson
+    const typeofcrime = req.body.typeofcrime  
+    
     const name = req.body.name
     const birth = req.body.birth
     const photo = req.body.photo
@@ -55,7 +58,20 @@ exports.createCntpeople = async(req,res,next)=>{
     const gender= req.body.gender
     const nationality = req.body.nationality
     const phone = req.body.phone
+
+    const regionId = req.body.regionId
+    const districtsId = req.body.districtsId
+    const mfyId = req.body.mfyId
+    const address = req.body.address
+    const workplace= req.body.workplace
+    const basisconsideration = req.body.basisconsideration
+    const dateofregistration = req.body.dateofregistration
+    const detailsoffence = req.body.detailsoffence
+    const reasonsoffence = req.body.reasonsoffence
+    const prerequisitecondition = req.body.prerequisitecondition
     const result = new Cntpeople({
+        typeofperson:typeofperson,
+        typeofcrime:typeofcrime,
         name:name,
         birth:birth,
         photo:photo,
@@ -65,6 +81,16 @@ exports.createCntpeople = async(req,res,next)=>{
         gender:gender,
         nationality:nationality,
         phone:phone,
+        regionId:regionId,
+        districtsId:districtsId,
+        mfyId:mfyId,
+        address:address,
+        workplace:workplace,
+        basisconsideration:basisconsideration,
+        dateofregistration:dateofregistration,
+        detailsoffence:detailsoffence,
+        reasonsoffence:reasonsoffence,
+        prerequisitecondition:prerequisitecondition,
         creatorId: req.userId
     })
     const results = await result.save()
