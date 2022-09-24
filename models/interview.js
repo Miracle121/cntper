@@ -1,23 +1,31 @@
 const {Schema,model} = require('mongoose')
-const cntpeopleSchema = new Schema({
-    name:{
-        type: String,
-        required:true
+const interviewSchema = new Schema({
+    personsId:{
+        type: Schema.Types.ObjectId,
+        ref: 'Cntpeople',
+        required: true
     }, 
-    photo:{
-        type: String,
+    photos:{
+        type:String,
         required:true
-    }, 
-    personal_code:{
-        type: Number,
-        required:true,
-        unique:true
     },
-   
+    textofconversation:{
+        type:String,
+        required:true
+    },
+    dateofinterview:{
+        type:Date,
+        required:true
+    },
+    fingerprint:{
+        type:String
+    },
     phone:{
         type:String
     },
-    
+    address:{
+        type:String
+    },
     creatorId:{
         type: Schema.Types.ObjectId,
         ref: 'Users',
@@ -25,4 +33,4 @@ const cntpeopleSchema = new Schema({
     }  
 },
 { timestamps:true })
-module.exports = model('Cntpeople',cntpeopleSchema)
+module.exports = model('Interview',interviewSchema)

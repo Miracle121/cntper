@@ -1,16 +1,17 @@
-const Nationality = require('../models/nationality')
+const Interview = require('../models/interview')
 const User = require('../models/users')
-const {validationResult} = require('express-validator')
 
-exports.getNationality= async(req,res,next)=>{
+const  moment = require('moment')
+
+exports.getInterview= async(req,res,next)=>{
     const page = req.query.page ||1
     const counts = 20 //req.query.count ||20
     let totalItems
     try {
-     totalItems = await Nationality.find().countDocuments()
-     const data = await Nationality.find().skip((page-1)*counts).limit(counts)
+     totalItems = await Interview.find().countDocuments()
+     const data = await Interview.find().skip((page-1)*counts).limit(counts)
      res.status(200).json({
-         message:`Малумотлар рўйхати`,
+         message:`Сухбат рўйхати`,
          data:data,
          totalItems:totalItems
      })
@@ -23,10 +24,10 @@ exports.getNationality= async(req,res,next)=>{
     } 
 }
 
-exports.getNationalityById = async(req,res,next)=>{
+exports.getInterviewById = async(req,res,next)=>{
     const AgesId= req.params.id
     try {
-        const result= await Nationality.findById(AgesId)
+        const result= await Interview.findById(AgesId)
         if(!result){
             const error = new Error('Object  not found')
             error.statusCode = 404
@@ -45,31 +46,59 @@ exports.getNationalityById = async(req,res,next)=>{
     }
 }
 
-exports.createNationality = async(req,res,next)=>{
-    const name = req.body.name
-    const result = new Nationality({
-        name:name,
-        creatorId: req.userId
-    })
-    const results = await result.save()
-    res.status(200).json({
-        message:`ma'lumotlar kiritildi`,
-        results: results,
-        creatorId: req.userId,
-    })
+exports.createInterview = async(req,res,next)=>{
+    const personsId = req.body.personsId
+    const photos = req.body.photos
+    const textofconversation = req.body.textofconversation
+    const dateofinterview = moment(req.body.dateofinterview,"DD/MM/YYYY")  //moment(req.body.dateofissue,"DD/MM/YYYY")
+    const fingerprint = req.body.fingerprint
+    const phone = req.body.phone
+    const address= req.body.address
+    try {
+        const result = new Interview({
+            personsId:personsId,
+            photos:photos,
+            textofconversation:textofconversation,
+            dateofinterview:dateofinterview,
+            fingerprint:fingerprint,
+            phone:phone,
+            address:address,       
+            creatorId: req.userId
+        })
+        const results = await result.save()
+        res.status(200).json({
+            message:`ma'lumotlar kiritildi`,
+            results: results,
+            creatorId: req.userId,
+        })
+    } catch (error) {
+        next(error)        
+    }   
 }
 
-exports.updateNationality = async(req,res,next)=>{ 
+exports.updateInterview = async(req,res,next)=>{ 
     const AgesId = req.params.id
-    const name = req.body.name
+    const personsId = req.body.personsId
+    const photos = req.body.photos
+    const textofconversation = req.body.textofconversation
+    const dateofinterview = moment(req.body.dateofinterview,"DD/MM/YYYY")  //moment(req.body.dateofissue,"DD/MM/YYYY")
+    const fingerprint = req.body.fingerprint
+    const phone = req.body.phone
+    const address= req.body.address
     try {
-    const result = await Nationality.findById(AgesId)
+        const result = await Interview.findById(AgesId)
     if(!result){
         const error = new Error('Object  not found')
         error.statusCode = 404
         throw error
     }
-    result.name= name
+    result.personsId= personsId
+    result.photos= photos
+    result.textofconversation= textofconversation
+    result.dateofinterview= dateofinterview
+    result.fingerprint= fingerprint
+    result.phone= phone
+    result.address= address
     const data =await result.save()  
     res.status(200).json({
         message:`ma'lumotlar o'zgartirildi`,
@@ -85,10 +114,10 @@ exports.updateNationality = async(req,res,next)=>{
     }
 }
 
-exports.deleteNationality = async(req,res,next)=>{
+exports.deleteInterview = async(req,res,next)=>{
     const AgesId= req.params.id
     try {
-        const deleteddata = await Nationality.findById(AgesId)
+        const deleteddata = await Interview.findById(AgesId)
     if(!deleteddata){
         const error = new Error('Object  not found')
         error.statusCode = 404
@@ -99,9 +128,9 @@ exports.deleteNationality = async(req,res,next)=>{
         error.statusCode =403
         throw error
     }
-    const data=await Nationality.findByIdAndRemove(AgesId)
+    const data=await Interview.findByIdAndRemove(AgesId)
     res.status(200).json({
-        message:'Region is deletes',
+        message:'Interview is deletes',
         data:data   
     })
     } catch (err) {
@@ -110,4 +139,15 @@ exports.deleteNationality = async(req,res,next)=>{
         }
         next(err)
     }
+}
+
+exports.findePerson= async(req,res,next)=>{
+
+}
+
+exports.filedecoder = async(req,res,next)=>{
+//   const   data = "data:" +  ";base64," + Buffer.from(req.body).toString('base64')
+//     console.log(data);
+console.log(req.body.file1);
+    // console.log( Buffer.from(req.body));
 }

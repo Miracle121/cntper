@@ -47,8 +47,7 @@ exports.getCntpeopleById = async(req,res,next)=>{
 
 exports.createCntpeople = async(req,res,next)=>{
     const typeofperson= req.body.typeofperson
-    const typeofcrime = req.body.typeofcrime  
-    
+    const typeofcrime = req.body.typeofcrime      
     const name = req.body.name
     const birth = req.body.birth
     const photo = req.body.photo
@@ -58,7 +57,6 @@ exports.createCntpeople = async(req,res,next)=>{
     const gender= req.body.gender
     const nationality = req.body.nationality
     const phone = req.body.phone
-
     const regionId = req.body.regionId
     const districtsId = req.body.districtsId
     const mfyId = req.body.mfyId

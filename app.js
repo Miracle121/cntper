@@ -18,6 +18,8 @@ const education = require('./routes/education')
 const nationality = require('./routes/nationality')
 const typeofperson = require('./routes/typeofperson')
 const typeofcrime = require('./routes/typeofcrime')
+const interview = require('./routes/interview')
+
 const auth = require('./routes/auth')
  
 
@@ -51,6 +53,7 @@ app.use('/education',education)
 app.use('/nationality',nationality)
 app.use('/typeofperson',typeofperson)
 app.use('/typeofcrime',typeofcrime)
+app.use('/interview',interview)
 
 
 
