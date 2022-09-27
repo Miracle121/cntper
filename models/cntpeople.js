@@ -89,6 +89,28 @@ const cntpeopleSchema = new Schema({
         required:true   
 
      },  
+
+     
+    statusofpeople:{
+        type:Schema.Types.ObjectId,
+        ref:'Statusofpeople',
+        // required:true 
+    },
+
+    criminalcase:{
+        type:Schema.Types.ObjectId,
+        ref:'Criminalcase',
+        // required:true 
+    },
+    criminalcodex:[{
+        type:Schema.Types.ObjectId,
+        ref:'Criminalcodex',
+        // required:true 
+    }],
+
+
+
+
     creatorId:{
         type: Schema.Types.ObjectId,
         ref: 'Users',

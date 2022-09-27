@@ -20,6 +20,11 @@ const typeofperson = require('./routes/typeofperson')
 const typeofcrime = require('./routes/typeofcrime')
 const interview = require('./routes/interview')
 
+const statusofpeople = require('./routes/statusofpeople')
+const criminalcase = require('./routes/criminalcase')
+const criminalcodex = require('./routes/criminalcodex')
+
+
 const auth = require('./routes/auth')
  
 
@@ -54,6 +59,10 @@ app.use('/nationality',nationality)
 app.use('/typeofperson',typeofperson)
 app.use('/typeofcrime',typeofcrime)
 app.use('/interview',interview)
+
+app.use('/statusofpeople',statusofpeople)
+app.use('/criminalcase',criminalcase)
+app.use('/criminalcodex',criminalcodex)
 
 
 

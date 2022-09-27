@@ -8,7 +8,22 @@ exports.getCntpeople= async(req,res,next)=>{
     let totalItems
     try {
      totalItems = await Cntpeople.find().countDocuments()
-     const data = await Cntpeople.find().skip((page-1)*counts).limit(counts)
+     const data = await Cntpeople.find()
+     .populate('typeofperson', 'name')
+     .populate('gender', 'name')
+     .populate('nationality', 'name')
+     .populate('regionId', 'name')
+     .populate('districtsId', 'name')
+     .populate('mfyId', 'name')
+     .populate('typeofcrime', 'name')
+     .populate('statusofpeople', 'name')
+     .populate('criminalcase', 'name')
+     .populate('criminalcodex', 'name')
+
+     
+     
+     
+     .skip((page-1)*counts).limit(counts)
      res.status(200).json({
          message:`Ro'yxatga olingan shaxslar`,
          data:data,
@@ -26,7 +41,16 @@ exports.getCntpeople= async(req,res,next)=>{
 exports.getCntpeopleById = async(req,res,next)=>{
     const AgesId= req.params.id
     try {
-        const result= await Cntpeople.findById(AgesId)
+        const result= await Cntpeople.findById(AgesId).populate('typeofperson', 'name')
+        .populate('gender', 'name')
+        .populate('nationality', 'name')
+        .populate('regionId', 'name')
+        .populate('districtsId', 'name')
+        .populate('mfyId', 'name')
+        .populate('typeofcrime', 'name')
+        .populate('statusofpeople', 'name')
+        .populate('criminalcase', 'name')
+        .populate('criminalcodex', 'name')
         if(!result){
             const error = new Error('Object  not found')
             error.statusCode = 404
@@ -46,6 +70,7 @@ exports.getCntpeopleById = async(req,res,next)=>{
 }
 
 exports.createCntpeople = async(req,res,next)=>{
+
     const typeofperson= req.body.typeofperson
     const typeofcrime = req.body.typeofcrime      
     const name = req.body.name
@@ -67,36 +92,44 @@ exports.createCntpeople = async(req,res,next)=>{
     const detailsoffence = req.body.detailsoffence
     const reasonsoffence = req.body.reasonsoffence
     const prerequisitecondition = req.body.prerequisitecondition
-    const result = new Cntpeople({
-        typeofperson:typeofperson,
-        typeofcrime:typeofcrime,
-        name:name,
-        birth:birth,
-        photo:photo,
-        country:country,
-        passport:passport,
-        personal_code:personal_code,
-        gender:gender,
-        nationality:nationality,
-        phone:phone,
-        regionId:regionId,
-        districtsId:districtsId,
-        mfyId:mfyId,
-        address:address,
-        workplace:workplace,
-        basisconsideration:basisconsideration,
-        dateofregistration:dateofregistration,
-        detailsoffence:detailsoffence,
-        reasonsoffence:reasonsoffence,
-        prerequisitecondition:prerequisitecondition,
-        creatorId: req.userId
-    })
-    const results = await result.save()
-    res.status(200).json({
-        message:`Ro'yxatga olingan shaxslar`,
-        data: results,
-        creatorId: req.userId,
-    })
+    
+    try {
+        const result = new Cntpeople({
+            typeofperson:typeofperson,
+            typeofcrime:typeofcrime,
+            name:name,
+            birth:birth,
+            photo:photo,
+            country:country,
+            passport:passport,
+            personal_code:personal_code,
+            gender:gender,
+            nationality:nationality,
+            phone:phone,
+            regionId:regionId,
+            districtsId:districtsId,
+            mfyId:mfyId,
+            address:address,
+            workplace:workplace,
+            basisconsideration:basisconsideration,
+            dateofregistration:dateofregistration,
+            detailsoffence:detailsoffence,
+            reasonsoffence:reasonsoffence,
+            prerequisitecondition:prerequisitecondition,
+            creatorId: req.userId
+        })
+        const results = await result.save()
+        res.status(200).json({
+            message:`Ro'yxatga olingan shaxslar`,
+            data: results,
+            creatorId: req.userId,
+        })
+        
+    } catch (error) {
+        next(error)
+        
+    }
+  
 }
 
 exports.updateCntpeople = async(req,res,next)=>{ 

@@ -302,11 +302,15 @@ exports.getUsers= async(req,res,next)=>{
     try {
     totalItems = await User.find().countDocuments()
      const users = await User.find()
-    //  .populate('regionId','name')
-    //  .populate('districtsId','name')
-    //  .populate('mfyId','name')
-    //  .populate('accountstatus','name')
-    //  .populate('accountrole','name')    
+     .populate('regionId','name')
+     .populate('districtsId','name')
+     .populate('mfyId','name')
+     .populate('gender','name')
+     .populate('accountstatus','name')
+     .populate('accountrole','name')
+     .populate('zvaniya','name')
+    
+
      .skip((page-1)*counts).limit(counts)
      res.status(200).json({
          message:`Userlar royxati`,
@@ -326,12 +330,13 @@ exports.getUsersById= async(req,res,next)=>{
     const userId= req.params.id
     try {
         const users= await User.findById(userId) 
-        // .populate('regionId','name')
-        // .populate('districtsId','name')
-        // .populate('mfyId','name')
-        // .populate('accountstatus','name')
-        // .populate('accountrole','name')
-        // .populate('creatorId')
+     .populate('regionId','name')
+     .populate('districtsId','name')
+     .populate('mfyId','name')
+     .populate('gender','name')
+     .populate('accountstatus','name')
+     .populate('accountrole','name')
+     .populate('zvaniya','name')
         
         if(!users){
             const error = new Error('Object  not found')
@@ -530,12 +535,14 @@ exports.UserFilter = async(req,res,next)=>{
    
 
     oredercount = await User.find(query)
-            .populate('regionId','name')
-            .populate('districtsId','name')
-            .populate('mfyId','name')
-            .populate('accountstatus','name')
-            .populate('accountrole','name')
-            .skip((page-1)*counts).limit(counts)
+    .populate('regionId','name')
+    .populate('districtsId','name')
+    .populate('mfyId','name')
+    .populate('gender','name')
+    .populate('accountstatus','name')
+    .populate('accountrole','name')
+    .populate('zvaniya','name')
+    .skip((page-1)*counts).limit(counts)
 
     res.status(200).json({
         message:`Ҳимоя ордерларини рўйхатга олиш`,
@@ -576,47 +583,13 @@ exports.Usersearch = async(req,res,next)=>{
              $or: or_list
         }
         const users = await User.find(bigQuery)
-     .populate('regionId','name')
-     .populate('districtsId','name')
-     .populate('mfyId','name')
-     .populate('accountstatus','name')
-     .populate('accountrole','name')
-     .populate({
-        path: 'orders',
-        populate: [
-            {
-                path: 'regiId',
-                select:'name'
-               
-            },
-            {
-                path: 'districtId',
-                select:'name'
-               
-            },
-            {
-                path: 'mfyId',
-                select:'name'
-               
-            },
-            {
-                path: 'orderstatus',
-                select:'name'
-               
-            },
-            {
-                path: 'basisorder',
-                select:'name'
-            },
-            {
-                path: 'basistermination',
-                select:'name'
-            },
-            {
-                path: 'orederresults',
-                select:'name'
-            }
-        ]})
+        .populate('regionId','name')
+        .populate('districtsId','name')
+        .populate('mfyId','name')
+        .populate('gender','name')
+        .populate('accountstatus','name')
+        .populate('accountrole','name')
+        .populate('zvaniya','name')
      .skip((page-1)*counts).limit(counts)
       const totalItems = await User.find(bigQuery).countDocuments() 
         res.status(200).json({
