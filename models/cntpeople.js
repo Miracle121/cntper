@@ -1,11 +1,13 @@
 const {Schema,model} = require('mongoose')
 const cntpeopleSchema = new Schema({   
+
     typeofperson:{
         type:Schema.Types.ObjectId,
         ref:'Typeofperson',
         required:true    
 
     },
+    
     name:{
         type: String,
         required:true
@@ -87,10 +89,7 @@ const cntpeopleSchema = new Schema({
         type:Schema.Types.ObjectId,
         ref:'Typeofcrime',
         required:true   
-
-     },  
-
-     
+     },       
     statusofpeople:{
         type:Schema.Types.ObjectId,
         ref:'Statusofpeople',

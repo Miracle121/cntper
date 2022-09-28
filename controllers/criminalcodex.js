@@ -31,7 +31,7 @@ exports.getCriminalcodex= async(req,res,next)=>{
 exports.getCriminalcodexById = async(req,res,next)=>{
     const AgesId= req.params.id
     try {
-        const result= await Criminalcodex.findById(AgesId)
+        const result= await Criminalcodex.findById(AgesId).populate('criminalcase', 'name')
         if(!result){
             const error = new Error('Object  not found')
             error.statusCode = 404
