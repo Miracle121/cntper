@@ -9,7 +9,11 @@ exports.getInterview= async(req,res,next)=>{
     let totalItems
     try {
      totalItems = await Interview.find().countDocuments()
-     const data = await Interview.find().skip((page-1)*counts).limit(counts)
+     const data = await Interview.find()
+     .populate("personsId")
+   
+     
+     .skip((page-1)*counts).limit(counts)
      res.status(200).json({
          message:`Сухбат рўйхати`,
          data:data,
@@ -27,7 +31,7 @@ exports.getInterview= async(req,res,next)=>{
 exports.getInterviewById = async(req,res,next)=>{
     const AgesId= req.params.id
     try {
-        const result= await Interview.findById(AgesId)
+        const result= await Interview.findById(AgesId).populate("personsId")
         if(!result){
             const error = new Error('Object  not found')
             error.statusCode = 404
@@ -49,7 +53,7 @@ exports.getInterviewById = async(req,res,next)=>{
 exports.createInterview = async(req,res,next)=>{
     const personsId = req.body.personsId
     const photos = req.body.photos
-    const textofconversation = req.body.textofconversation
+    const textofconversation = req.body.textofconversation //dateofinterview
     const dateofinterview = moment(req.body.dateofinterview,"DD/MM/YYYY")  //moment(req.body.dateofissue,"DD/MM/YYYY")
     const fingerprint = req.body.fingerprint
     const phone = req.body.phone
