@@ -1,21 +1,16 @@
-const Criminalcodex = require('../models/criminalcodex')
+const Basisconsideration = require('../models/basisconsideration')
 const User = require('../models/users')
 const {validationResult} = require('express-validator')
 
-exports.getCriminalcodex= async(req,res,next)=>{
+exports.getBasisconsideration= async(req,res,next)=>{
     const page = req.query.page ||1
     const counts = 20 //req.query.count ||20
     let totalItems
     try {
-     totalItems = await Criminalcodex.find().countDocuments()
-     const data = await Criminalcodex
-     .find()
-     .populate('criminalcase', 'name')
-     .skip((page-1)*counts)
-     .limit(counts)
-     
+     totalItems = await Basisconsideration.find().countDocuments()
+     const data = await Basisconsideration.find().skip((page-1)*counts).limit(counts)
      res.status(200).json({
-         message:`Жиноят кодекси модалари`,
+         message:`Ҳисобга олиш сабаби`,
          data:data,
          totalItems:totalItems
      })
@@ -28,17 +23,17 @@ exports.getCriminalcodex= async(req,res,next)=>{
     } 
 }
 
-exports.getCriminalcodexById = async(req,res,next)=>{
+exports.getBasisconsiderationById = async(req,res,next)=>{
     const AgesId= req.params.id
     try {
-        const result= await Criminalcodex.findById(AgesId).populate('criminalcase', 'name')
+        const result= await Basisconsideration.findById(AgesId)
         if(!result){
             const error = new Error('Object  not found')
             error.statusCode = 404
             throw error
         }
         res.status(200).json({
-            message:`Жиноят кодекси модалари`,
+            message:`Ҳисобга олиш сабаби`,
             result:result
         })
     } catch (err) {
@@ -50,12 +45,10 @@ exports.getCriminalcodexById = async(req,res,next)=>{
     }
 }
 
-exports.createCriminalcodex = async(req,res,next)=>{
+exports.createBasisconsideration = async(req,res,next)=>{
     const name = req.body.name
-    const criminalcase = req.body.criminalcase
-    const result = new Criminalcodex({
+    const result = new Basisconsideration({
         name:name,
-        criminalcase:criminalcase,
         creatorId: req.userId
     })
     const results = await result.save()
@@ -66,11 +59,11 @@ exports.createCriminalcodex = async(req,res,next)=>{
     })
 }
 
-exports.updateCriminalcodex = async(req,res,next)=>{ 
+exports.updateBasisconsideration = async(req,res,next)=>{ 
     const AgesId = req.params.id
     const name = req.body.name
     try {
-    const result = await Criminalcodex.findById(AgesId)
+    const result = await Basisconsideration.findById(AgesId)
     if(!result){
         const error = new Error('Object  not found')
         error.statusCode = 404
@@ -92,10 +85,10 @@ exports.updateCriminalcodex = async(req,res,next)=>{
     }
 }
 
-exports.deleteCriminalcodex = async(req,res,next)=>{
+exports.deleteBasisconsideration = async(req,res,next)=>{
     const AgesId= req.params.id
     try {
-        const deleteddata = await Criminalcodex.findById(AgesId)
+        const deleteddata = await Basisconsideration.findById(AgesId)
     if(!deleteddata){
         const error = new Error('Object  not found')
         error.statusCode = 404
@@ -106,7 +99,7 @@ exports.deleteCriminalcodex = async(req,res,next)=>{
         error.statusCode =403
         throw error
     }
-    const data=await Criminalcodex.findByIdAndRemove(AgesId)
+    const data=await Basisconsideration.findByIdAndRemove(AgesId)
     res.status(200).json({
         message:'Region is deletes',
         data:data   
@@ -117,26 +110,4 @@ exports.deleteCriminalcodex = async(req,res,next)=>{
         }
         next(err)
     }
-}
-
-exports.getCriminalcodexBycaseid = async(req,res,next)=>{
-    const regId= req.params.id   
-        try {
-            const dist= await Criminalcodex.find({criminalcase:regId}).populate('criminalcase','name')
-            if(!dist){
-                const error = new Error('Object  not found')
-                error.statusCode = 404
-                throw error
-            }
-            res.status(200).json({
-                message:`ma'lumotlar topildi`,
-                data:dist
-            })
-        } catch (err) {
-            if(!err.statusCode)
-            {
-                err.statusCode =500
-            }
-            next(err)
-        } 
 }

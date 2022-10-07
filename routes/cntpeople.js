@@ -12,4 +12,14 @@ router.put('/:id',IsAuth,cntpeople.updateCntpeople)
 router.delete('/:id',IsAuth,cntpeople.deleteCntpeople)
 router.get('/f/filter',IsAuth,cntpeople.findperson)
 
+router.get('/f/filterbyname',IsAuth,cntpeople.findpersonByName)
+router.get('/f/filterbyreg',IsAuth,cntpeople.findpersonByRegId)
+
+
+
+
+
+router.post('/f/formone1',IsAuth,cntpeople.formone)
+
+
 module.exports = router

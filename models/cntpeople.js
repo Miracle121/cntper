@@ -57,16 +57,19 @@ const cntpeopleSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Mfy'            
      },   
-     address:{
+    address:{
         type: String
      },
-     workplace:{
+    workplace:{
         type: String,
         required:true
      },
-     basisconsideration:{
-        type: String,
-        required:true
+    basisconsideration:{
+        // type: String,
+        // required:true
+        type:Schema.Types.ObjectId,
+        ref:'Basisconsideration',
+        required:true 
      },
      dateofregistration:{
         type: Date,
@@ -88,32 +91,44 @@ const cntpeopleSchema = new Schema({
         type:Schema.Types.ObjectId,
         ref:'Typeofcrime',
         required:true   
-     },       
-    statusofpeople:{
+     },     
+     statusofpeople:{
         type:Schema.Types.ObjectId,
         ref:'Statusofpeople',
-        // required:true 
-    },
+        required:true 
+     },
 
-    criminalcase:{
+
+    // UI dan to'g'irlash kerak bo'lgan joylari bor
+
+     convicted:{
+        type:Schema.Types.ObjectId,
+        ref:'Convicted',
+        // required:true 
+     },
+
+     criminalcase:{
         type:Schema.Types.ObjectId,
         ref:'Criminalcase',
         // required:true 
-    },
-    criminalcodex:[{
+     },
+     criminalcodex:[{
         type:Schema.Types.ObjectId,
         ref:'Criminalcodex',
         // required:true 
-    }],
+     }],
 
-
-
-
-    creatorId:{
+    //
+     reasondismissal:{
+        type:Schema.Types.ObjectId,
+        ref:'Reasondismissal',
+        // required:true 
+     },
+     creatorId:{
         type: Schema.Types.ObjectId,
         ref: 'Users',
         required: true
-    }  
+     }  
 },
 { timestamps:true })
 module.exports = model('Cntpeople',cntpeopleSchema)

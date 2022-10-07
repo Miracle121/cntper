@@ -292,3 +292,94 @@ exports.findperson= async(req,res,next)=>{
     }
 
 }
+
+exports.findpersonByName= async(req,res,next)=>{
+    
+    const page = req.query.page || 1
+    const counts = 20 //req.query.count ||20
+    let totalItems
+    const name = req.get('name') || null
+    let que = {}
+    let queorder = {}
+    let oredercount
+    if (name) {
+        que.name = name
+        queorder.name = name
+    }
+    console.log(que);
+   
+    try {
+        
+        totalItems = await Cntpeople.find(que).countDocuments()
+        oredercount = await Cntpeople.find(que)         
+            .skip((page - 1) * counts)
+            .limit(counts)
+
+        res.status(200).json({
+            message: `Фуқарони топилди`,
+            oreders: oredercount,
+            totalItems: totalItems 
+            
+        })
+
+    } catch (err) {
+       
+        next(err)
+    }
+
+}
+
+exports.findpersonByRegId= async(req,res,next)=>{    
+    // console.log("keldi");
+    const page = req.query.page || 1
+    const counts = 20 //req.query.count ||20
+    let totalItems
+    const regionId = req.get('regionId') || null
+    const districtsId = req.get('districtsId') || null
+    const mfyId = req.get('mfyId') || null
+    const phone = req.get('phone') || null
+    let que = {}
+    let queorder = {}
+    let oredercount
+    if (regionId) {
+        que.regionId = regionId
+        queorder.regionId = regionId
+    }
+    if (districtsId) {
+        que.districtsId = districtsId
+        queorder.districtsId = districtsId
+    }
+    if (mfyId) {
+        que.mfyId = mfyId
+        queorder.mfyId = mfyId
+    }
+    // if (phone) {
+    //     que.phone = phone
+    //     queorder.phone = phone
+    // }
+    // console.log(que);
+
+    try {
+        
+        totalItems = await Cntpeople.find(que).countDocuments()
+        oredercount = await Cntpeople.find(que)         
+            .skip((page - 1) * counts)
+            .limit(counts)
+        res.status(200).json({
+            message: `Фуқарони топилди`,
+            oreders: oredercount,
+            totalItems: totalItems             
+        })
+    } catch (err) {
+       
+        next(err)
+    }
+}
+
+
+
+
+exports.formone= async(req,res,next)=>{
+    const name = req.body.name
+    console.log(name);
+}

@@ -23,6 +23,9 @@ const interview = require('./routes/interview')
 const statusofpeople = require('./routes/statusofpeople')
 const criminalcase = require('./routes/criminalcase')
 const criminalcodex = require('./routes/criminalcodex')
+const convicted = require('./routes/convicted')
+const basisconsideration = require('./routes/basisconsideration')
+const reasondismissal = require('./routes/reasondismissal')
 
 
 const auth = require('./routes/auth')
@@ -63,6 +66,12 @@ app.use('/interview',interview)
 app.use('/statusofpeople',statusofpeople)
 app.use('/criminalcase',criminalcase)
 app.use('/criminalcodex',criminalcodex)
+
+
+app.use('/convicted',convicted)
+app.use('/basisconsideration',basisconsideration)
+
+app.use('/reasondismissal',reasondismissal)
 
 
 

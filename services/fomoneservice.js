@@ -4,7 +4,6 @@ const util = require('util');
 const exp = require('constants');
 const checkAuth = require('../util/checkAuth')
 
-// Convert fs.readFile into Promise version of same
 const readFile = util.promisify(fs.readFile);
 const writeFileAsync = util.promisify(fs.writeFile)
 
@@ -16,13 +15,16 @@ const writeToken = async (token) => {
 }
 
 exports.checkAccess = async (response) => {
+
+
     try {
         checkStatus(response);
         return 1
     } catch (error) {
 
         const URL = "http://10.190.0.77:7101"
-       
+        //:3000/auth/login"
+        // let data =""
         const body = {
             "Login": "WomensRight",
             "Password": "W0men$2021P@$P",

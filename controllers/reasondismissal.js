@@ -1,21 +1,16 @@
-const Criminalcodex = require('../models/criminalcodex')
+const Reasondismissal = require('../models/reasondismissal')
 const User = require('../models/users')
 const {validationResult} = require('express-validator')
 
-exports.getCriminalcodex= async(req,res,next)=>{
+exports.getReasondismissal= async(req,res,next)=>{
     const page = req.query.page ||1
     const counts = 20 //req.query.count ||20
     let totalItems
     try {
-     totalItems = await Criminalcodex.find().countDocuments()
-     const data = await Criminalcodex
-     .find()
-     .populate('criminalcase', 'name')
-     .skip((page-1)*counts)
-     .limit(counts)
-     
+     totalItems = await Reasondismissal.find().countDocuments()
+     const data = await Reasondismissal.find().skip((page-1)*counts).limit(counts)
      res.status(200).json({
-         message:`Жиноят кодекси модалари`,
+         message:`Ҳисобдан чиқариш сабаби`,
          data:data,
          totalItems:totalItems
      })
@@ -28,18 +23,18 @@ exports.getCriminalcodex= async(req,res,next)=>{
     } 
 }
 
-exports.getCriminalcodexById = async(req,res,next)=>{
+exports.getReasondismissalById = async(req,res,next)=>{
     const AgesId= req.params.id
     try {
-        const result= await Criminalcodex.findById(AgesId).populate('criminalcase', 'name')
+        const result= await Reasondismissal.findById(AgesId)
         if(!result){
             const error = new Error('Object  not found')
             error.statusCode = 404
             throw error
         }
         res.status(200).json({
-            message:`Жиноят кодекси модалари`,
-            result:result
+            message:`Ҳисобдан чиқариш сабаби`,
+            data:result
         })
     } catch (err) {
         if(!err.statusCode)
@@ -50,27 +45,25 @@ exports.getCriminalcodexById = async(req,res,next)=>{
     }
 }
 
-exports.createCriminalcodex = async(req,res,next)=>{
+exports.createReasondismissal = async(req,res,next)=>{
     const name = req.body.name
-    const criminalcase = req.body.criminalcase
-    const result = new Criminalcodex({
+    const result = new Reasondismissal({
         name:name,
-        criminalcase:criminalcase,
         creatorId: req.userId
     })
     const results = await result.save()
     res.status(200).json({
-        message:`ma'lumotlar kiritildi`,
-        results: results,
+        message:`Ҳисобдан чиқариш сабаби`,
+        data: results,
         creatorId: req.userId,
     })
 }
 
-exports.updateCriminalcodex = async(req,res,next)=>{ 
+exports.updateReasondismissal = async(req,res,next)=>{ 
     const AgesId = req.params.id
     const name = req.body.name
     try {
-    const result = await Criminalcodex.findById(AgesId)
+    const result = await Reasondismissal.findById(AgesId)
     if(!result){
         const error = new Error('Object  not found')
         error.statusCode = 404
@@ -79,8 +72,8 @@ exports.updateCriminalcodex = async(req,res,next)=>{
     result.name= name
     const data =await result.save()  
     res.status(200).json({
-        message:`ma'lumotlar o'zgartirildi`,
-        resultorder: data
+        message:`Ҳисобдан чиқариш сабаби`,
+        data: data
     })
     } catch (err) {
         if(!err.statusCode){
@@ -92,10 +85,10 @@ exports.updateCriminalcodex = async(req,res,next)=>{
     }
 }
 
-exports.deleteCriminalcodex = async(req,res,next)=>{
+exports.deleteReasondismissal = async(req,res,next)=>{
     const AgesId= req.params.id
     try {
-        const deleteddata = await Criminalcodex.findById(AgesId)
+        const deleteddata = await Reasondismissal.findById(AgesId)
     if(!deleteddata){
         const error = new Error('Object  not found')
         error.statusCode = 404
@@ -106,7 +99,7 @@ exports.deleteCriminalcodex = async(req,res,next)=>{
         error.statusCode =403
         throw error
     }
-    const data=await Criminalcodex.findByIdAndRemove(AgesId)
+    const data=await Reasondismissal.findByIdAndRemove(AgesId)
     res.status(200).json({
         message:'Region is deletes',
         data:data   
@@ -117,26 +110,4 @@ exports.deleteCriminalcodex = async(req,res,next)=>{
         }
         next(err)
     }
-}
-
-exports.getCriminalcodexBycaseid = async(req,res,next)=>{
-    const regId= req.params.id   
-        try {
-            const dist= await Criminalcodex.find({criminalcase:regId}).populate('criminalcase','name')
-            if(!dist){
-                const error = new Error('Object  not found')
-                error.statusCode = 404
-                throw error
-            }
-            res.status(200).json({
-                message:`ma'lumotlar topildi`,
-                data:dist
-            })
-        } catch (err) {
-            if(!err.statusCode)
-            {
-                err.statusCode =500
-            }
-            next(err)
-        } 
 }
