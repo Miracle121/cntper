@@ -106,17 +106,25 @@ const cntpeopleSchema = new Schema({
         ref:'Convicted',
         // required:true 
      },
-
-     criminalcase:{
-        type:Schema.Types.ObjectId,
-        ref:'Criminalcase',
-        // required:true 
-     },
-     criminalcodex:[{
-        type:Schema.Types.ObjectId,
-        ref:'Criminalcodex',
-        // required:true 
+     criminalstatus:[{
+        eventdate:{
+            type: Date,
+            required:true
+        },
+        criminalcase:{
+            type:Schema.Types.ObjectId,
+            ref:'Criminalcase',
+            // required:true 
+         },
+         criminalcodex:[{
+            type:Schema.Types.ObjectId,
+            ref:'Criminalcodex',
+            // required:true 
+         }],
+        
      }],
+
+    
 
     //
      reasondismissal:{

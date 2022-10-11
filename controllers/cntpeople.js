@@ -18,8 +18,21 @@ exports.getCntpeople= async(req,res,next)=>{
      .populate('mfyId', 'name')
      .populate('typeofcrime', 'name')
      .populate('statusofpeople', 'name')
-     .populate('criminalcase', 'name')
-     .populate('criminalcodex', 'name')
+     .populate({
+        path:'criminalstatus',
+        populate:[
+            {
+                path: 'criminalcase',
+                select: 'name'
+            },
+            {
+                path: 'criminalcodex',
+                select: 'name'
+            },
+
+        ]
+    })
+     
 
      
      
@@ -89,16 +102,15 @@ exports.createCntpeople = async(req,res,next)=>{
     const address = req.body.address
     const workplace= req.body.workplace
     const basisconsideration = req.body.basisconsideration
-
     const dateofregistration =  moment(req.body.dateofregistration,"DD/MM/YYYY")
-
     const detailsoffence = req.body.detailsoffence
     const reasonsoffence = req.body.reasonsoffence
     const prerequisitecondition = req.body.prerequisitecondition
 
     const statusofpeople = req.body.statusofpeople
-    const criminalcase = req.body.criminalcase
-    const criminalcodex = req.body.criminalcodex
+    const criminalstatus = req.body.criminalstatus
+    // const criminalcase = req.body.criminalcase
+    // const criminalcodex = req.body.criminalcodex
 
     try {
         const result = new Cntpeople({
@@ -124,8 +136,9 @@ exports.createCntpeople = async(req,res,next)=>{
             reasonsoffence:reasonsoffence,
             prerequisitecondition:prerequisitecondition,
             statusofpeople:statusofpeople,
-            criminalcase:criminalcase,
-            criminalcodex:criminalcodex,
+            criminalstatus:criminalstatus,
+            // criminalcase:criminalcase,
+            // criminalcodex:criminalcodex,
             creatorId: req.userId
         })
         const results = await result.save()
@@ -375,10 +388,6 @@ exports.findpersonByRegId= async(req,res,next)=>{
         next(err)
     }
 }
-
-
-
-
 exports.formone= async(req,res,next)=>{
     const name = req.body.name
     console.log(name);
