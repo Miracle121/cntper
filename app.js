@@ -26,21 +26,12 @@ const criminalcodex = require('./routes/criminalcodex')
 const convicted = require('./routes/convicted')
 const basisconsideration = require('./routes/basisconsideration')
 const reasondismissal = require('./routes/reasondismissal')
-
-
 const auth = require('./routes/auth')
- 
-
-
 const app = express();
-
 // const URL= 'mongodb://localhost:27017/cntperssons'
-
  const URL = 'mongodb://alfa:admin123a@localhost:27017/cntperssons?authSource=admin'
 // const URL ='mongodb://alfa:admin123a@91.190.159.70:27017/cntperssons?authSource=admin'
-
 global.__basedir = __dirname;
-
 app.use(cors())
 app.use(express.json())
 app.use(bodyParser.json());

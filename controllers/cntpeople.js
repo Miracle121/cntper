@@ -55,16 +55,30 @@ exports.getCntpeople= async(req,res,next)=>{
 exports.getCntpeopleById = async(req,res,next)=>{
     const AgesId= req.params.id
     try {
-        const result= await Cntpeople.findById(AgesId).populate('typeofperson', 'name')
-        .populate('gender', 'name')
-        .populate('nationality', 'name')
-        .populate('regionId', 'name')
-        .populate('districtsId', 'name')
-        .populate('mfyId', 'name')
-        .populate('typeofcrime', 'name')
-        .populate('statusofpeople', 'name')
-        .populate('criminalcase', 'name')
-        .populate('criminalcodex', 'name')
+        const result= await Cntpeople.findById(AgesId)
+        .populate('typeofperson', 'name')
+     .populate('gender', 'name')
+     .populate('nationality', 'name')
+     .populate('regionId', 'name')
+     .populate('districtsId', 'name')
+     .populate('mfyId', 'name')
+     .populate('typeofcrime', 'name')
+     .populate('statusofpeople', 'name')
+     .populate({
+        path:'criminalstatus',
+        populate:[
+            {
+                path: 'criminalcase',
+                select: 'name'
+            },
+            {
+                path: 'criminalcodex',
+                select: 'name'
+            },
+
+        ]
+    })
+
         if(!result){
             const error = new Error('Object  not found')
             error.statusCode = 404
