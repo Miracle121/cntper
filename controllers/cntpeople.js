@@ -338,7 +338,29 @@ exports.findpersonByName= async(req,res,next)=>{
     try {
         
         totalItems = await Cntpeople.find(que).countDocuments()
-        oredercount = await Cntpeople.find(que)         
+        oredercount = await Cntpeople.find(que)  
+        .populate('typeofperson', 'name')
+        .populate('gender', 'name')
+        .populate('nationality', 'name')
+        .populate('regionId', 'name')
+        .populate('districtsId', 'name')
+        .populate('mfyId', 'name')
+        .populate('typeofcrime', 'name')
+        .populate('statusofpeople', 'name')
+        .populate({
+           path:'criminalstatus',
+           populate:[
+               {
+                   path: 'criminalcase',
+                   select: 'name'
+               },
+               {
+                   path: 'criminalcodex',
+                   select: 'name'
+               },
+   
+           ]
+       })       
             .skip((page - 1) * counts)
             .limit(counts)
 
@@ -361,6 +383,7 @@ exports.findpersonByRegId= async(req,res,next)=>{
     const page = req.query.page || 1
     const counts = 20 //req.query.count ||20
     let totalItems
+    const name = req.get('name') || null
     const regionId = req.get('regionId') || null
     const districtsId = req.get('districtsId') || null
     const mfyId = req.get('mfyId') || null
@@ -368,6 +391,11 @@ exports.findpersonByRegId= async(req,res,next)=>{
     let que = {}
     let queorder = {}
     let oredercount
+    if (name) {
+        que.name = name
+        queorder.name = name
+        
+    }
     if (regionId) {
         que.regionId = regionId
         queorder.regionId = regionId
@@ -389,7 +417,8 @@ exports.findpersonByRegId= async(req,res,next)=>{
     try {
         
         totalItems = await Cntpeople.find(que).countDocuments()
-        oredercount = await Cntpeople.find(que)         
+        oredercount = await Cntpeople.find(que) 
+
             .skip((page - 1) * counts)
             .limit(counts)
         res.status(200).json({
