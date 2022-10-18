@@ -1,5 +1,6 @@
 const Interview = require('../models/interview')
 const User = require('../models/users')
+const path = require('path')
 
 const  moment = require('moment')
 
@@ -50,45 +51,68 @@ exports.getInterviewById = async(req,res,next)=>{
     }
 }
 
-exports.createInterview = async(req,res,next)=>{
-    const personsId = req.body.personsId
-    const photos = req.body.photos
-    const textofconversation = req.body.textofconversation //dateofinterview
+exports.createInterview = async(req,res,next)=>{   
+    const personsId = req.body.personsId  
+    const file = req.files.file
+    const textofconversation = req.body.textofconversation 
     const dateofinterview = moment(req.body.dateofinterview,"DD/MM/YYYY")  //moment(req.body.dateofissue,"DD/MM/YYYY")
-    const fingerprint = req.body.fingerprint
-    const phone = req.body.phone
+    const fingerprint = req.body.fingerprint    
     const address= req.body.address
-    try {
-        const result = new Interview({
-            personsId:personsId,
-            photos:photos,
-            textofconversation:textofconversation,
-            dateofinterview:dateofinterview,
-            fingerprint:fingerprint,
-            phone:phone,
-            address:address,       
-            creatorId: req.userId
-        })
-        const results = await result.save()
-        res.status(200).json({
-            message:`ma'lumotlar kiritildi`,
-            results: results,
-            creatorId: req.userId,
-        })
-    } catch (error) {
-        next(error)        
-    }   
-}
+    const phone= req.body.phone    
+    if(file.mimetype.startsWith('image'))
+    {
+        file.name = `photo-${Date.now()}-${personsId}${path.parse(file.name).ext}`     
+        file.mv(`./public/peoplephoto/${file.name}`,async(err)=>{
+            if(err){
+                console.log(err);
+             }
+    })
+   try {
+    const result = new Interview({
+        personsId:personsId,
+        photos:file.name,
+        textofconversation:textofconversation,
+        dateofinterview:dateofinterview,
+        fingerprint:fingerprint,
+        phone:phone,
+        address:address,       
+        creatorId: req.userId
+    })
+    const results = await result.save()
+    res.status(200).json({
+        message:`ma'lumotlar kiritildi`,
+        results: results,
+        creatorId: req.userId,
+    })
+} catch (error) {
+    next(error)     
+}}
+else{
+    res.status(200).json({
+        message:`file is not photo`,      
+    })
+}}
 
 exports.updateInterview = async(req,res,next)=>{ 
     const AgesId = req.params.id
     const personsId = req.body.personsId
-    const photos = req.body.photos
+    // const photos = req.body.photos
+    const file = req.files.file
     const textofconversation = req.body.textofconversation
     const dateofinterview = moment(req.body.dateofinterview,"DD/MM/YYYY")  //moment(req.body.dateofissue,"DD/MM/YYYY")
     const fingerprint = req.body.fingerprint
     const phone = req.body.phone
     const address= req.body.address
+
+    if(file.mimetype.startsWith('image'))
+    {
+        file.name = `photo-${Date.now()}-${personsId}${path.parse(file.name).ext}`     
+        file.mv(`./public/peoplephoto/${file.name}`,async(err)=>{
+            if(err){
+                console.log(err);
+             }
+    })
+
     try {
         const result = await Interview.findById(AgesId)
     if(!result){
@@ -116,6 +140,14 @@ exports.updateInterview = async(req,res,next)=>{
         }
         next(err)
     }
+}else{
+    res.status(200).json({
+        message:`file is not photo`,      
+    })
+}
+
+
+   
 }
 
 exports.deleteInterview = async(req,res,next)=>{
@@ -145,13 +177,29 @@ exports.deleteInterview = async(req,res,next)=>{
     }
 }
 
-exports.findePerson= async(req,res,next)=>{
+exports.findeByPersonId= async(req,res,next)=>{  
+    const personId= req.params.id
+    try {
+        const result= await Interview
+        .find({"personsId":personId})
+        .populate("personsId")
+        if(!result){
+            const error = new Error('Object  not found')
+            error.statusCode = 404
+            throw error
+        }
+        res.status(200).json({
+            message:`ma'lumotlar topildi`,
+            result:result
+        })
+    } catch (err) {
+        if(!err.statusCode)
+        {
+            err.statusCode =500
+        }
+        next(err)
+    }
+
 
 }
 
-exports.filedecoder = async(req,res,next)=>{
-//   const   data = "data:" +  ";base64," + Buffer.from(req.body).toString('base64')
-//     console.log(data);
-console.log(req.body.file1);
-    // console.log( Buffer.from(req.body));
-}

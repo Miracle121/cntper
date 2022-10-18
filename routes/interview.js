@@ -10,6 +10,9 @@ router.get('/:id',IsAuth,interview.getInterviewById)
 router.post('/',IsAuth,interview.createInterview)
 router.put('/:id',IsAuth,interview.updateInterview)
 router.delete('/:id',IsAuth,interview.deleteInterview)
-router.post('/fs/photos',IsAuth,interview.filedecoder)
+
+router.get('/f/:id',IsAuth,interview.findeByPersonId)
+
+// router.post('/fs/photos',IsAuth,interview.filedecoder)
 
 module.exports = router

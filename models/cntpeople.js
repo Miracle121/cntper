@@ -114,7 +114,7 @@ const cntpeopleSchema = new Schema({
         criminalcase:{
             type:Schema.Types.ObjectId,
             ref:'Criminalcase',
-            // required:true 
+            required:true 
          },
          criminalcodex:[{
             type:Schema.Types.ObjectId,
@@ -124,9 +124,6 @@ const cntpeopleSchema = new Schema({
         
      }],
 
-    
-
-    //
      reasondismissal:{
         type:Schema.Types.ObjectId,
         ref:'Reasondismissal',

@@ -1,4 +1,5 @@
 const Cntpeople = require('../models/cntpeople')
+const path = require('path')
 const User = require('../models/users')
 const {validationResult, body} = require('express-validator')
 const  moment = require('moment')
@@ -97,6 +98,7 @@ exports.getCntpeopleById = async(req,res,next)=>{
     }
 }
 
+//Ishlatilmayapti hozir hammasi form dataga otganligi uchun
 exports.createCntpeople = async(req,res,next)=>{
 
     const typeofperson= req.body.typeofperson
@@ -166,81 +168,103 @@ exports.createCntpeople = async(req,res,next)=>{
     }  
 }
 
+
+
+
 exports.updateCntpeople = async(req,res,next)=>{ 
-    const AgesId = req.params.id
-    const name = req.body.name
-    const birth = moment(req.body.birth,"DD/MM/YYYY") //req.body.birth
-    const photo = req.body.photo
-    const country = req.body.country
-    const passport = req.body.passport
+
+    const name= req.body.name
+    const birth =moment(req.body.birth  ,"DD/MM/YYYY")
     const personal_code = req.body.personal_code
+    const passport= req.body.passport
+    const phone= req.body.phone
+    const nationality= req.body.nationality
     const gender= req.body.gender
-    const nationality = req.body.nationality
-    const phone = req.body.phone
-
-    const regionId = req.body.regionId
-    const districtsId = req.body.districtsId
-    const mfyId = req.body.mfyId
-    const address = req.body.address
+    const country= req.body.country
+    const regionId= req.body.regionId
+    const districtsId= req.body.districtsId
+    const mfyId= req.body.mfyId
+    const address= req.body.address
     const workplace= req.body.workplace
-    const basisconsideration = req.body.basisconsideration
+    const typeofperson= req.body.typeofperson
+    const typeofcrime= req.body.typeofcrime
+    const basisconsideration= req.body.basisconsideration
+    const detailsoffence= req.body.detailsoffence
+    const reasonsoffence= req.body.reasonsoffence
+    const prerequisitecondition= req.body.prerequisitecondition
+    const statusofpeople= req.body.statusofpeople
+    const convicted= req.body.convicted
+    const criminalstatus= JSON.parse(req.body.criminalstatus)  
+    const dateofregistration=  moment(req.body.dateofregistration  ,"DD/MM/YYYY") 
+    const file = req.files.file
 
-    const dateofregistration =  moment(req.body.dateofregistration,"DD/MM/YYYY")
-
-    const detailsoffence = req.body.detailsoffence
-    const reasonsoffence = req.body.reasonsoffence
-    const prerequisitecondition = req.body.prerequisitecondition
-
-    const statusofpeople = req.body.statusofpeople
-    const criminalcase = req.body.criminalcase
-    const criminalcodex = req.body.criminalcodex
-
-
+    if(file.mimetype.startsWith('image')){
+        file.name = `photo-${personal_code}${path.parse(file.name).ext}`     
+      file.mv(`./public/peoplephoto/${file.name}`,async(err)=>{
+       if(err){
+           console.log(err);
+       }
+   })
     try {
-    const result = await Cntpeople.findById(AgesId)
-    if(!result){
-        const error = new Error('Object  not found')
-        error.statusCode = 404
-        throw error
-    }
 
-    result.name= name
-    result.birth=birth
-    result.photo=photo
-    result.country=country
-    result.passport=passport
-    result.personal_code=personal_code
-    result.gender=gender
-    result.nationality=nationality
-    result.phone=phone
-    result.regionId=regionId
-    result.districtsId=districtsId
-    result.mfyId=mfyId
-    result.address=address
-    result.workplace=workplace
-
-    result.basisconsideration=basisconsideration
-    result.dateofregistration=dateofregistration
-    result.detailsoffence=detailsoffence
-    result.reasonsoffence=reasonsoffence
-    result.prerequisitecondition=prerequisitecondition
-    result.statusofpeople=statusofpeople
-    result.criminalcase=criminalcase
-    result.criminalcodex=criminalcodex
-
-    const data =await result.save()  
-    res.status(200).json({
-        message:`Ro'yxatga olingan shaxslar`,
-        data: data
-    })
-    } catch (err) {
-        if(!err.statusCode){
-            const error = new Error('Intenall error11111')
-            error.statusCode = 500
+        const result = await Cntpeople.findById(AgesId)
+        if(!result){
+            const error = new Error('Object  not found')
+            error.statusCode = 404
             throw error
         }
+    
+        result.name= name
+        result.birth=birth
+        result.photo=file.name
+        result.country=country
+        result.passport=passport
+        result.personal_code=personal_code
+        result.gender=gender
+        result.nationality=nationality
+        result.phone=phone
+        result.regionId=regionId
+        result.districtsId=districtsId
+        result.mfyId=mfyId
+        result.address=address
+        result.workplace=workplace
+        result.basisconsideration=basisconsideration
+        result.dateofregistration=dateofregistration
+        result.detailsoffence=detailsoffence
+        result.reasonsoffence=reasonsoffence
+        result.prerequisitecondition=prerequisitecondition
+        result.statusofpeople=statusofpeople
+        result.criminalcase=criminalcase
+        result.criminalcodex=criminalcodex
+        result.typeofperson=typeofperson
+        result.typeofcrime=typeofcrime
+        result.convicted=convicted
+        result.criminalstatus=criminalstatus 
+        const data =await result.save()  
+        res.status(200).json({
+            message:`Ro'yxatga olingan shaxslar`,
+            data: data,
+            creatorId: req.userId,
+        })
+               
+    } 
+    catch (err) {
+        res.status(500).json({
+            message:`Ro'yxatga olishda xatolik`,
+            data: err,
+            creatorId: req.userId,
+        })
         next(err)
     }
+        
+    }
+    else{
+        res.status(422).json({
+            message:`file is not photo format`,
+        })   
+    }
+
+
 }
 
 exports.deleteCntpeople = async(req,res,next)=>{
@@ -431,7 +455,99 @@ exports.findpersonByRegId= async(req,res,next)=>{
         next(err)
     }
 }
+
+
 exports.formone= async(req,res,next)=>{
     const name = req.body.name
     console.log(name);
+}
+
+
+exports.createByUseingFileUploads = async(req,res,next)=>{
+    
+    const name= req.body.name
+    const birth =moment(req.body.birth  ,"DD/MM/YYYY")
+    const personal_code = req.body.personal_code
+    const passport= req.body.passport
+    const phone= req.body.phone
+    const nationality= req.body.nationality
+    const gender= req.body.gender
+    const country= req.body.country
+    const regionId= req.body.regionId
+    const districtsId= req.body.districtsId
+    const mfyId= req.body.mfyId
+    const address= req.body.address
+    const workplace= req.body.workplace
+    const typeofperson= req.body.typeofperson
+    const typeofcrime= req.body.typeofcrime
+    const basisconsideration= req.body.basisconsideration
+    const detailsoffence= req.body.detailsoffence
+    const reasonsoffence= req.body.reasonsoffence
+    const prerequisitecondition= req.body.prerequisitecondition
+    const statusofpeople= req.body.statusofpeople
+    const convicted= req.body.convicted
+    const criminalstatus= JSON.parse(req.body.criminalstatus)  
+
+    const dateofregistration=  moment(req.body.dateofregistration  ,"DD/MM/YYYY") 
+    const file = req.files.file
+    
+    if(file.mimetype.startsWith('image')){
+        file.name = `photo-${personal_code}${path.parse(file.name).ext}`     
+    file.mv(`./public/peoplephoto/${file.name}`,async(err)=>{
+       if(err){
+           console.log(err);
+       }
+   })
+    try {
+           const result = new Cntpeople({
+            typeofperson:typeofperson,
+            typeofcrime:typeofcrime,
+            name:name,
+            birth:birth,
+            photo:file.name,
+            country:country,
+            passport:passport,
+            personal_code:personal_code,
+            gender:gender,
+            nationality:nationality,
+            phone:phone,
+            regionId:regionId,
+            districtsId:districtsId,
+            mfyId:mfyId,
+            address:address,
+            workplace:workplace,
+            basisconsideration:basisconsideration,
+            dateofregistration:dateofregistration,
+            detailsoffence:detailsoffence,
+            reasonsoffence:reasonsoffence,
+            prerequisitecondition:prerequisitecondition,
+            statusofpeople:statusofpeople,
+            criminalstatus:criminalstatus,
+            convicted:convicted,
+            creatorId: req.userId
+        })
+        const results = await result.save()
+        res.status(200).json({
+            message:`Ro'yxatga olingan shaxslar`,
+            data: results,
+            creatorId: req.userId,
+        })            
+    } 
+    catch (err) {
+        res.status(500).json({
+            message:`Ro'yxatga olishda xatolik`,
+            data: err,
+            creatorId: req.userId,
+        })
+        next(err)
+    }
+        
+    }
+    else{
+        res.status(422).json({
+            message:`file is not photo format`,
+        })   
+    }
+
+    
 }

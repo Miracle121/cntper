@@ -7,13 +7,15 @@ const router = express.Router()
 
 router.get('/',IsAuth,cntpeople.getCntpeople)
 router.get('/:id',IsAuth,cntpeople.getCntpeopleById)
-router.post('/',IsAuth,cntpeople.createCntpeople)
+router.post('/',IsAuth,cntpeople.createByUseingFileUploads)
 router.put('/:id',IsAuth,cntpeople.updateCntpeople)
 router.delete('/:id',IsAuth,cntpeople.deleteCntpeople)
 router.get('/f/filter',IsAuth,cntpeople.findperson)
 
 router.get('/f/filterbyname',IsAuth,cntpeople.findpersonByName)
 router.get('/f/filterbyreg',IsAuth,cntpeople.findpersonByRegId)
+
+// router.post('/f/fileuploading',IsAuth,cntpeople.createByUseingFileUploads)
 
 
 
