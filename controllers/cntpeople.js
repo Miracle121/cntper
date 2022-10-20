@@ -168,11 +168,8 @@ exports.createCntpeople = async(req,res,next)=>{
     }  
 }
 
-
-
-
 exports.updateCntpeople = async(req,res,next)=>{ 
-
+    const AgesId= req.params.id
     const name= req.body.name
     const birth =moment(req.body.birth  ,"DD/MM/YYYY")
     const personal_code = req.body.personal_code
@@ -194,29 +191,35 @@ exports.updateCntpeople = async(req,res,next)=>{
     const prerequisitecondition= req.body.prerequisitecondition
     const statusofpeople= req.body.statusofpeople
     const convicted= req.body.convicted
-    const criminalstatus= JSON.parse(req.body.criminalstatus)  
+    const criminalstatus= req.body.criminalstatus ? JSON.parse(req.body.criminalstatus) : null
     const dateofregistration=  moment(req.body.dateofregistration  ,"DD/MM/YYYY") 
-    const file = req.files.file
-
-    if(file.mimetype.startsWith('image')){
-        file.name = `photo-${personal_code}${path.parse(file.name).ext}`     
-      file.mv(`./public/peoplephoto/${file.name}`,async(err)=>{
-       if(err){
-           console.log(err);
-       }
-   })
+    let file   = null
+    if(req.files){
+         file = req.files.file      
+         if(file.mimetype.startsWith('image')){        
+            file.name = `photo-${personal_code}${path.parse(file.name).ext}`    
+            file.mv(`./public/peoplephoto/${file.name}`,async(err)=>{
+                if(err){
+                    console.log(err);
+                }
+            })
+            }
+        else{
+            res.status(422).json({
+                message:`file is not photo format`,
+            })   
+        }
+    }   
     try {
-
         const result = await Cntpeople.findById(AgesId)
         if(!result){
-            const error = new Error('Object  not found')
-            error.statusCode = 404
-            throw error
-        }
-    
+            res.satatus(404).json({
+                message:`M'lumot topilmadi`,
+            })
+        }        
         result.name= name
-        result.birth=birth
-        result.photo=file.name
+        result.birth=birth      
+        result.photo= file ? file.name : result.photo
         result.country=country
         result.passport=passport
         result.personal_code=personal_code
@@ -233,20 +236,17 @@ exports.updateCntpeople = async(req,res,next)=>{
         result.detailsoffence=detailsoffence
         result.reasonsoffence=reasonsoffence
         result.prerequisitecondition=prerequisitecondition
-        result.statusofpeople=statusofpeople
-        result.criminalcase=criminalcase
-        result.criminalcodex=criminalcodex
+        result.statusofpeople=statusofpeople       
         result.typeofperson=typeofperson
         result.typeofcrime=typeofcrime
         result.convicted=convicted
-        result.criminalstatus=criminalstatus 
-        const data =await result.save()  
+        result.criminalstatus=criminalstatus
+        const data =await result.save()         
         res.status(200).json({
             message:`Ro'yxatga olingan shaxslar`,
             data: data,
             creatorId: req.userId,
-        })
-               
+        })               
     } 
     catch (err) {
         res.status(500).json({
@@ -255,16 +255,7 @@ exports.updateCntpeople = async(req,res,next)=>{
             creatorId: req.userId,
         })
         next(err)
-    }
-        
-    }
-    else{
-        res.status(422).json({
-            message:`file is not photo format`,
-        })   
-    }
-
-
+    }   
 }
 
 exports.deleteCntpeople = async(req,res,next)=>{
@@ -455,13 +446,6 @@ exports.findpersonByRegId= async(req,res,next)=>{
         next(err)
     }
 }
-
-
-exports.formone= async(req,res,next)=>{
-    const name = req.body.name
-    console.log(name);
-}
-
 
 exports.createByUseingFileUploads = async(req,res,next)=>{
     

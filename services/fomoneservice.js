@@ -15,8 +15,6 @@ const writeToken = async (token) => {
 }
 
 exports.checkAccess = async (response) => {
-
-
     try {
         checkStatus(response);
         return 1

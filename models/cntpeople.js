@@ -1,139 +1,139 @@
-const {Schema,model} = require('mongoose')
-const cntpeopleSchema = new Schema({   
+const { Schema, model } = require('mongoose')
+const cntpeopleSchema = new Schema({
 
-    typeofperson:{
-        type:Schema.Types.ObjectId,
-        ref:'Typeofperson',
-        required:true    
+    typeofperson: {
+        type: Schema.Types.ObjectId,
+        ref: 'Typeofperson',
+        required: true
 
     },
-    name:{
+    name: {
         type: String,
-        required:true
+        required: true
     },
-    birth:{
+    birth: {
         type: Date,
-        required:true
-    },   
-    photo:{
-        type: String,
-        required:true
+        required: true
     },
-    country:{
+    photo: {
         type: String,
-        required:true
+        required: true
     },
-    passport:{
+    country: {
         type: String,
-        required:true
-    },   
-    personal_code:{
+        required: true
+    },
+    passport: {
+        type: String,
+        required: true
+    },
+    personal_code: {
         type: Number,
-        required:true,
-        unique:true
+        required: true,
+        unique: true
     },
-    gender:{
-        type:Schema.Types.ObjectId,
-        ref:'Gender',        
-    },  
+    gender: {
+        type: Schema.Types.ObjectId,
+        ref: 'Gender',
+    },
     nationality: {
-        type:Schema.Types.ObjectId,
-        ref:'Nationality',  
+        type: Schema.Types.ObjectId,
+        ref: 'Nationality',
     },
-    phone:{
-        type:String
+    phone: {
+        type: String
     },
-    regionId:{
+    regionId: {
         type: Schema.Types.ObjectId,
         ref: 'Region',
         // required: true
-     },
-    districtsId:{
+    },
+    districtsId: {
         type: Schema.Types.ObjectId,
         ref: 'Districts'
-      //   required: true
-     },
-    mfyId:{
+        //   required: true
+    },
+    mfyId: {
         type: Schema.Types.ObjectId,
-        ref: 'Mfy'            
-     },   
-    address:{
+        ref: 'Mfy'
+    },
+    address: {
         type: String
-     },
-    workplace:{
+    },
+    workplace: {
         type: String,
-        required:true
-     },
-    basisconsideration:{
+        required: true
+    },
+    basisconsideration: {
         // type: String,
         // required:true
-        type:Schema.Types.ObjectId,
-        ref:'Basisconsideration',
-        required:true 
-     },
-     dateofregistration:{
+        type: Schema.Types.ObjectId,
+        ref: 'Basisconsideration',
+        required: true
+    },
+    dateofregistration: {
         type: Date,
-        required:true
-     },
-     detailsoffence:{
+        required: true
+    },
+    detailsoffence: {
         type: String,
-        required:true
-     },
-     reasonsoffence:{
+        required: true
+    },
+    reasonsoffence: {
         type: String,
-        required:true
-     },
-     prerequisitecondition:{
+        required: true
+    },
+    prerequisitecondition: {
         type: String,
-        required:true
-     },
-     typeofcrime:{
-        type:Schema.Types.ObjectId,
-        ref:'Typeofcrime',
-        required:true   
-     },     
-     statusofpeople:{
-        type:Schema.Types.ObjectId,
-        ref:'Statusofpeople',
-        required:true 
-     },
+        required: true
+    },
+    typeofcrime: {
+        type: Schema.Types.ObjectId,
+        ref: 'Typeofcrime',
+        required: true
+    },
+    statusofpeople: {
+        type: Schema.Types.ObjectId,
+        ref: 'Statusofpeople',
+        required: true
+    },
 
 
     // UI dan to'g'irlash kerak bo'lgan joylari bor
 
-     convicted:{
-        type:Schema.Types.ObjectId,
-        ref:'Convicted',
+    convicted: {
+        type: Schema.Types.ObjectId,
+        ref: 'Convicted',
         // required:true 
-     },
-     criminalstatus:[{
-        eventdate:{
+    },
+    criminalstatus: [{
+        eventdate: {
             type: Date,
-            required:true
+            required: true
         },
-        criminalcase:{
-            type:Schema.Types.ObjectId,
-            ref:'Criminalcase',
-            required:true 
-         },
-         criminalcodex:[{
-            type:Schema.Types.ObjectId,
-            ref:'Criminalcodex',
+        criminalcase: {
+            type: Schema.Types.ObjectId,
+            ref: 'Criminalcase',
+            required: true
+        },
+        criminalcodex: [{
+            type: Schema.Types.ObjectId,
+            ref: 'Criminalcodex',
             // required:true 
-         }],
-        
-     }],
+        }],
 
-     reasondismissal:{
-        type:Schema.Types.ObjectId,
-        ref:'Reasondismissal',
+    }],
+
+    reasondismissal: {
+        type: Schema.Types.ObjectId,
+        ref: 'Reasondismissal',
         // required:true 
-     },
-     creatorId:{
+    },
+    creatorId: {
         type: Schema.Types.ObjectId,
         ref: 'Users',
         required: true
-     }  
+    }
 },
-{ timestamps:true })
-module.exports = model('Cntpeople',cntpeopleSchema)
+    { timestamps: true })
+module.exports = model('Cntpeople', cntpeopleSchema)

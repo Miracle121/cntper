@@ -21,7 +21,7 @@ router.get('/f/filterbyreg',IsAuth,cntpeople.findpersonByRegId)
 
 
 
-router.post('/f/formone1',IsAuth,cntpeople.formone)
+// router.post('/f/formone1',IsAuth,cntpeople.formone)
 
 
 module.exports = router
