@@ -139,10 +139,9 @@ exports.UpdateUsers = async (req, res, next) => {
     const accountrole = req.body.accountrole
     const zvaniya = req.body.zvaniya
     const phone = req.body.phone
-    let file = null
-
+    let file
     if (req.files) {
-        file = req.files
+        file = req.files.file
         if (file.mimetype.startsWith('image')) {
             file.name = `photo-${email}${path.parse(file.name).ext}`
             file.mv(`./public/usersphoto/${file.name}`, async (err) => {
@@ -151,11 +150,7 @@ exports.UpdateUsers = async (req, res, next) => {
                 }
             })
         }
-
     }
-
-
-
     try {
         const user = await User.findById(userId)
         if (!user) {
@@ -167,10 +162,8 @@ exports.UpdateUsers = async (req, res, next) => {
         const hashpass = await bcrypt.hash(password, 12)
         user.name = name
         user.secondname = secondname
-        user.middlename = middlename
-        
+        user.middlename = middlename        
         user.photos = file ? file.name : user.photos
-
         user.position = position
         user.regionId = regionId
         user.districtsId = districtsId
