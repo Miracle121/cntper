@@ -1,5 +1,11 @@
 const { Schema, model } = require('mongoose')
 const interviewdateSchema = new Schema({
+    
+    personsId:{
+        type: Schema.Types.ObjectId,
+        ref: 'Cntpeople',
+        required: true
+    }, 
 
     typeofinterviewdate:{
         type: Schema.Types.ObjectId,

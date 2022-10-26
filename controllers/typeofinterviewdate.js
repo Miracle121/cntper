@@ -10,7 +10,7 @@ exports.getTypeofinterviewdate= async(req,res,next)=>{
      totalItems = await Typeofinterviewdate.find().countDocuments()
      const data = await Typeofinterviewdate.find().skip((page-1)*counts).limit(counts)
      res.status(200).json({
-         message:`Пол`,
+         message:`Суҳбат санаси турлари`,
          data:data,
          totalItems:totalItems
      })
@@ -33,7 +33,7 @@ exports.getTypeofinterviewdateById = async(req,res,next)=>{
             throw error
         }
         res.status(200).json({
-            message:`ma'lumotlar topildi`,
+            message:`Суҳбат санаси турлари`,
             result:result
         })
     } catch (err) {
@@ -47,13 +47,15 @@ exports.getTypeofinterviewdateById = async(req,res,next)=>{
 
 exports.createTypeofinterviewdate = async(req,res,next)=>{
     const name = req.body.name
+    const unixtime = req.body.unixtime
     const result = new Typeofinterviewdate({
         name:name,
+        unixtime:unixtime,
         creatorId: req.userId
     })
     const results = await result.save()
     res.status(200).json({
-        message:`ma'lumotlar kiritildi`,
+        message:`Суҳбат санаси турлари`,
         results: results,
         creatorId: req.userId,
     })
@@ -62,6 +64,8 @@ exports.createTypeofinterviewdate = async(req,res,next)=>{
 exports.updateTypeofinterviewdate = async(req,res,next)=>{ 
     const AgesId = req.params.id
     const name = req.body.name
+    const unixtime = req.body.unixtime
+
     try {
     const result = await Typeofinterviewdate.findById(AgesId)
     if(!result){
@@ -70,9 +74,10 @@ exports.updateTypeofinterviewdate = async(req,res,next)=>{
         throw error
     }
     result.name= name
+    result.unixtime=unixtime
     const data =await result.save()  
     res.status(200).json({
-        message:`ma'lumotlar o'zgartirildi`,
+        message:`Суҳбат санаси турлари`,
         resultorder: data
     })
     } catch (err) {

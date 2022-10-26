@@ -11,4 +11,7 @@ router.post('/',IsAuth,typeofcrime.createTypeofcrime)
 router.put('/:id',IsAuth,typeofcrime.updateTypeofcrime)
 router.delete('/:id',IsAuth,typeofcrime.deleteTypeofcrime)
 
+router.get('/f/:id',IsAuth,typeofcrime.getTypeofcrimeBytypeofliability)
+
+
 module.exports = router
