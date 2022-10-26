@@ -14,6 +14,7 @@ router.get('/f/filter',IsAuth,cntpeople.findperson)
 
 router.get('/f/filterbyname',IsAuth,cntpeople.findpersonByName)
 router.get('/f/filterbyreg',IsAuth,cntpeople.findpersonByRegId)
+router.get('/f/:id',IsAuth,cntpeople.findByCreatorId)
 
 // router.post('/f/fileuploading',IsAuth,cntpeople.createByUseingFileUploads)
 

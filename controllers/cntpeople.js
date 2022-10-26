@@ -32,12 +32,8 @@ exports.getCntpeople= async(req,res,next)=>{
             },
 
         ]
-    })
-     
-
-     
-     
-     
+     })
+     .populate('creatorId','name')       
      .skip((page-1)*counts).limit(counts)
      res.status(200).json({
          message:`Ro'yxatga olingan shaxslar`,
@@ -58,14 +54,14 @@ exports.getCntpeopleById = async(req,res,next)=>{
     try {
         const result= await Cntpeople.findById(AgesId)
         .populate('typeofperson', 'name')
-     .populate('gender', 'name')
-     .populate('nationality', 'name')
-     .populate('regionId', 'name')
-     .populate('districtsId', 'name')
-     .populate('mfyId', 'name')
-     .populate('typeofcrime', 'name')
-     .populate('statusofpeople', 'name')
-     .populate({
+        .populate('gender', 'name')
+        .populate('nationality', 'name')
+        .populate('regionId', 'name')
+        .populate('districtsId', 'name')
+        .populate('mfyId', 'name')
+        .populate('typeofcrime', 'name')
+        .populate('statusofpeople', 'name')
+        .populate({
         path:'criminalstatus',
         populate:[
             {
@@ -78,7 +74,8 @@ exports.getCntpeopleById = async(req,res,next)=>{
             },
 
         ]
-    })
+        })
+        .populate('creatorId','name')
 
         if(!result){
             const error = new Error('Object  not found')
@@ -534,4 +531,51 @@ exports.createByUseingFileUploads = async(req,res,next)=>{
     }
 
     
+}
+
+exports.findByCreatorId= async(req,res,next)=>{
+    const creatorId= req.params.id
+    // console.log(creatorId);
+    const page = req.query.page ||1
+    const counts = 20 //req.query.count ||20
+    let totalItems
+    try {
+     totalItems = await Cntpeople.find().countDocuments()
+     const data = await Cntpeople.find({'creatorId':creatorId})
+     .populate('typeofperson', 'name')
+     .populate('gender', 'name')
+     .populate('nationality', 'name')
+     .populate('regionId', 'name')
+     .populate('districtsId', 'name')
+     .populate('mfyId', 'name')
+     .populate('typeofcrime', 'name')
+     .populate('statusofpeople', 'name')
+     .populate({
+        path:'criminalstatus',
+        populate:[
+            {
+                path: 'criminalcase',
+                select: 'name'
+            },
+            {
+                path: 'criminalcodex',
+                select: 'name'
+            },
+
+        ]
+    })
+    .skip((page-1)*counts).limit(counts)
+     res.status(200).json({
+         message:`Ro'yxatga olingan shaxslar`,
+         data:data,
+         totalItems:totalItems
+     })
+    } catch (err) {
+        if(!err.statusCode)
+        {
+            err.statusCode =500
+        }
+        next(err)
+    } 
+
 }

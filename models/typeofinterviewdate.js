@@ -1,14 +1,11 @@
 const {Schema,model} = require('mongoose')
-
-const typeofcrimeSchema = new Schema({
-    typeofliability:{
-        type: Schema.Types.ObjectId,
-        ref: 'Typeofliability',
-        required: true
-    }, 
+const typeofinterviewdateSchema = new Schema({
     name:{
         type:String,
         required:true
+    },
+    unixtime:{
+        type:Number,
     },
     creatorId:{
         type: Schema.Types.ObjectId,
@@ -17,5 +14,4 @@ const typeofcrimeSchema = new Schema({
     }  
 },
 { timestamps:true })
-
-module.exports = model('Typeofcrime',typeofcrimeSchema)
+module.exports = model('Typeofinterviewdate',typeofinterviewdateSchema)

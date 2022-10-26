@@ -65,11 +65,10 @@ const cntpeopleSchema = new Schema({
         required: true
     },
     basisconsideration: {
-        // type: String,
-        // required:true
+       
         type: Schema.Types.ObjectId,
         ref: 'Basisconsideration',
-        required: true
+        // required: true
     },
     dateofregistration: {
         type: Date,

@@ -8,7 +8,7 @@ exports.getTypeofcrime= async(req,res,next)=>{
     let totalItems
     try {
      totalItems = await Typeofcrime.find().countDocuments()
-     const data = await Typeofcrime.find().skip((page-1)*counts).limit(counts)
+     const data = await Typeofcrime.find().populate('typeofliability','name').skip((page-1)*counts).limit(counts)
      res.status(200).json({
          message:`тип преступления`,
          data:data,
@@ -26,7 +26,7 @@ exports.getTypeofcrime= async(req,res,next)=>{
 exports.getTypeofcrimeById = async(req,res,next)=>{
     const AgesId= req.params.id
     try {
-        const result= await Typeofcrime.findById(AgesId)
+        const result= await Typeofcrime.findById(AgesId).populate('typeofliability','name')
         if(!result){
             const error = new Error('Object  not found')
             error.statusCode = 404
@@ -47,7 +47,9 @@ exports.getTypeofcrimeById = async(req,res,next)=>{
 
 exports.createTypeofcrime = async(req,res,next)=>{
     const name = req.body.name
+    const typeofliability= req.body.typeofliability
     const result = new Typeofcrime({
+        typeofliability:typeofliability,
         name:name,
         creatorId: req.userId
     })
@@ -62,6 +64,7 @@ exports.createTypeofcrime = async(req,res,next)=>{
 exports.updateTypeofcrime= async(req,res,next)=>{ 
     const AgesId = req.params.id
     const name = req.body.name
+    const typeofliability= req.body.typeofliability
     try {
     const result = await Typeofcrime.findById(AgesId)
     if(!result){
@@ -69,6 +72,7 @@ exports.updateTypeofcrime= async(req,res,next)=>{
         error.statusCode = 404
         throw error
     }
+    result.typeofliability=typeofliability
     result.name= name
     const data =await result.save()  
     res.status(200).json({
@@ -106,6 +110,30 @@ exports.deleteTypeofcrime = async(req,res,next)=>{
     })
     } catch (err) {
         if(!err.statusCode){
+            err.statusCode =500
+        }
+        next(err)
+    }
+}
+
+exports.getTypeofcrimeBytypeofliability = async(req,res,next)=>{
+    const AgesId= req.params.id
+    try {
+        const result= await Typeofcrime.find({
+            'typeofliability':AgesId
+        }).populate('typeofliability','name')
+        if(!result){
+            const error = new Error('Object  not found')
+            error.statusCode = 404
+            throw error
+        }
+        res.status(200).json({
+            message:`тип преступления`,
+            result:result
+        })
+    } catch (err) {
+        if(!err.statusCode)
+        {
             err.statusCode =500
         }
         next(err)
